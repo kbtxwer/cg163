@@ -1,14 +1,15 @@
 <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<script>
 	
-	function downloadRes(){
+	function downloadRes(url,fileName){
 		let data_xhr = new XMLHttpRequest()
-		data_xhr.open('GET','7-zip.base64',true)
+		data_xhr.open('GET',url,true)
 		data_xhr.send()
 		
 		data_xhr.onreadystatechange = function(){
 			if(data_xhr.readyState == 4 && data_xhr.status == 200){
-				saveFile(data_xhr.response,"7-zip.exe")
+				saveFile(data_xhr.response,fileName)
 			}
 		}
 	}
@@ -46,5 +47,7 @@
 	</script>
 </head>
 <body>
-<button onclick="downloadRes()" >下载</button>
+<button onclick="downloadRes('7-zip.base64','7-zip.exe')" >下载 7-zip</button><br>
+<button onclick="downloadRes('360cse_9.5.0.138.exe.base64','360cse_9.5.0.138.exe')" >下载 360极速浏览器</button><br>
+<button onclick="downloadRes('sysdiag-all-5.0.69.4-2022.8.8.1.exe.base64','sysdiag-all-5.0.69.4-2022.8.8.1.exe')" >下载 火绒安全</button><br>
 </body>
