@@ -2,14 +2,22 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<script>
 	
-	function downloadRes(url,fileName){
+	function downloadRes(url,fileName,btn_id){
+		let btn = document.getElementById(btn_id)
+		btn.innerText = "正在下载..."
+		btn.disabled = true
+		
 		let data_xhr = new XMLHttpRequest()
 		data_xhr.open('GET',url,true)
 		data_xhr.send()
 		
 		data_xhr.onreadystatechange = function(){
 			if(data_xhr.readyState == 4 && data_xhr.status == 200){
-				saveFile(data_xhr.response,fileName)
+				btn.innerText = fileName + " 后台下载完毕，点击保存"
+				btn.disabled = false
+				btn.onclick = function(){
+					saveFile(data_xhr.response,fileName)
+				}
 			}
 		}
 	}
@@ -39,7 +47,7 @@
 				}
 				await writableStream.write(new Blob([ab],{type:"application/octet-stream"}));
 			}
-			//await writableStream.close();
+			await writableStream.close();
 		}catch(err){
 			console.error(err.name,err.message);
 		}
@@ -47,7 +55,7 @@
 	</script>
 </head>
 <body>
-<button onclick="downloadRes('7-zip.base64','7-zip.exe')" >下载 7-zip</button><br>
-<button onclick="downloadRes('360cse_9.5.0.138.exe.base64','360cse_9.5.0.138.exe')" >下载 360极速浏览器</button><br>
-<button onclick="downloadRes('sysdiag-all-5.0.69.4-2022.8.8.1.exe.base64','sysdiag-all-5.0.69.4-2022.8.8.1.exe')" >下载 火绒安全</button><br>
+<button onclick="downloadRes('7-zip.base64','7-zip.exe','btn_7z')" id='btn_7z' >下载 7-zip</button><br>
+<button onclick="downloadRes('360cse_9.5.0.138.exe.base64','360cse_9.5.0.138.exe','btn_360c')" id='btn_360c' >下载 360极速浏览器</button><br>
+<button onclick="downloadRes('sysdiag-all-5.0.69.4-2022.8.8.1.exe.base64','sysdiag-all-5.0.69.4-2022.8.8.1.exe','btn_hy')" id='btn_hy' >下载 火绒安全</button><br>
 </body>
