@@ -1,0 +1,50 @@
+<head>
+	<script>
+	
+	function downloadRes(){
+		let data_xhr = new XMLHttpRequest()
+		data_xhr.open('GET','7-zip.base64',true)
+		data_xhr.send()
+		
+		data_xhr.onreadystatechange = function(){
+			if(data_xhr.readyState == 4 && data_xhr.status == 200){
+				saveFile(data_xhr.response,"7-zip.exe")
+			}
+		}
+	}
+	
+	async function saveFile(b64data,fileName){
+		try{
+			const newHandle = await window.showSaveFilePicker({
+				suggestedName: fileName,
+				types:[
+					{
+						description: "BINARY file",
+						accept: {
+							"application/octet-stream": [".exe"],
+						},
+					}
+				]
+			});
+			const writableStream = await newHandle.createWritable();
+			if(!b64data){
+				await writableStream.write("test");
+			}else{
+				let bytes = window.atob(b64data);
+				let ab = new ArrayBuffer(bytes.length);
+				let ia = new Uint8Array(ab);
+				for(let i=0;i<bytes.length;i++){
+					ia[i] = bytes.charCodeAt(i);
+				}
+				await writableStream.write(new Blob([ab],{type:"application/octet-stream"}));
+			}
+			//await writableStream.close();
+		}catch(err){
+			console.error(err.name,err.message);
+		}
+	}
+	</script>
+</head>
+<body>
+<button onclick="downloadRes()" >下载</button>
+</body>
